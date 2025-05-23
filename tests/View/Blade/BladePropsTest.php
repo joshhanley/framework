@@ -25,6 +25,7 @@ foreach ($attributes->all() as $__key => $__value) {
 
 $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 
+unset($__propName);
 unset($__propNames);
 unset($__newAttributes);
 
