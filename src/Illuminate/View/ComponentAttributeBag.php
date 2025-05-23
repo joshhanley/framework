@@ -405,8 +405,7 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
         foreach ($keys as $key => $default) {
             $key = is_numeric($key) ? $default : $key;
 
-            $props[] = $key;
-            $props[] = Str::kebab($key);
+            $props[Str::kebab($key)] = $key;
         }
 
         return $props;
