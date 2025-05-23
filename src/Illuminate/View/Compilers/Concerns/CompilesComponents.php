@@ -165,6 +165,8 @@ trait CompilesComponents
 foreach (\$attributes->all() as \$__key => \$__value) {
     if (in_array(\$__key, \$__propNames)) {
         \$\$__key = \$\$__key ?? \$__value;
+    } else if (\$__propName = (\$__propNames[\$__key] ?? null)) {
+        \$\$__propName = \$__value;
     } else {
         \$__newAttributes[\$__key] = \$__value;
     }
@@ -172,6 +174,7 @@ foreach (\$attributes->all() as \$__key => \$__value) {
 
 \$attributes = new \Illuminate\View\ComponentAttributeBag(\$__newAttributes);
 
+unset(\$__propName);
 unset(\$__propNames);
 unset(\$__newAttributes);
 

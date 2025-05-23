@@ -16,6 +16,8 @@ $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([\'one\
 foreach ($attributes->all() as $__key => $__value) {
     if (in_array($__key, $__propNames)) {
         $$__key = $$__key ?? $__value;
+    } else if ($__propName = ($__propNames[$__key] ?? null)) {
+        $$__propName = $__value;
     } else {
         $__newAttributes[$__key] = $__value;
     }
@@ -23,6 +25,7 @@ foreach ($attributes->all() as $__key => $__value) {
 
 $attributes = new \Illuminate\View\ComponentAttributeBag($__newAttributes);
 
+unset($__propName);
 unset($__propNames);
 unset($__newAttributes);
 
@@ -59,5 +62,27 @@ unset($__defined_vars); ?>', $this->compiler->compileString('@props([\'one\' => 
         $this->assertNull($attributes->get('test1'));
         $this->assertNull($attributes->get('test2'));
         $this->assertSame($attributes->get('test3'), 'value3');
+    }
+
+    public function testMultiWordPropsAreExtractedFromParentAttributesCorrectly()
+    {
+        $testWord1 = $testWord2 = $testWord4 = null;
+
+        $attributes = new ComponentAttributeBag(['test-word1' => 'value1', 'test-word2' => 'value2', 'test-word3' => 'value3']);
+
+        $template = $this->compiler->compileString('@props([\'testWord1\' => \'default\', \'testWord2\', \'testWord4\' => \'default\'])');
+
+        ob_start();
+        eval(" ?> $template <?php ");
+        ob_get_clean();
+
+        $this->assertSame($testWord1, 'value1');
+        $this->assertSame($testWord2, 'value2');
+        $this->assertFalse(isset($testWord3));
+        $this->assertSame($testWord4, 'default');
+
+        $this->assertNull($attributes->get('test-word1'));
+        $this->assertNull($attributes->get('test-word2'));
+        $this->assertSame($attributes->get('test-word3'), 'value3');
     }
 }
